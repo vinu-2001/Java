@@ -1,0 +1,491 @@
+mysql> use workers;
+Database changed
+
+mysql> create table worker(
+    -> Worker_ID int not  null primary key auto_increment,
+    -> First_Name varchar(25),
+    -> Last_Name varchar(25),
+    -> Salary int,
+    -> Joining_Date datetime,
+    -> Department varchar(25));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into Worker(First_Name,Last_Name,Salary,Joining_Date,Department) values
+    ->     ('Suraj','Suryawanshi',100000,'14-06-22 09.00.00','Admin'),('Dwyane','Johnson',20000,'14-02-22 09.00.00','Admin'),
+    ->     ('John','Abrahim',40000,'14-06-22 09.00.00','HR'),('Kim','Joe',30000,'14-02-22 09.00.00','Admin'),
+    ->     ('Lucky','Langer',50000,'14-01-22 09.00.00','Accountant'),('Bruce','Lee',30000,'14-04-22 09.00.00','Accountant'),
+    ->      ('Siddhu','Sanwan',35000,'14-01-22 09.00.00','Admin'),('Sahal','Samad',30000,'14-03-22 09.00.00','Admin');
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from worker;
++-----------+------------+-------------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department |
++-----------+------------+-------------+--------+---------------------+------------+
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |
+|         2 | Dwyane     | Johnson     |  20000 | 2014-02-22 09:00:00 | Admin      |
+|         3 | John       | Abrahim     |  40000 | 2014-06-22 09:00:00 | HR         |
+|         4 | Kim        | Joe         |  30000 | 2014-02-22 09:00:00 | Admin      |
+|         5 | Lucky      | Langer      |  50000 | 2014-01-22 09:00:00 | Accountant |
+|         6 | Bruce      | Lee         |  30000 | 2014-04-22 09:00:00 | Accountant |
+|         7 | Siddhu     | Sanwan      |  35000 | 2014-01-22 09:00:00 | Admin      |
+|         8 | Sahal      | Samad       |  30000 | 2014-03-22 09:00:00 | Admin      |
++-----------+------------+-------------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT FIRST_NAME AS WORKER_NAME FROM WORKER ;
++-------------+
+| WORKER_NAME |
++-------------+
+| Suraj       |
+| Dwyane      |
+| John        |
+| Kim         |
+| Lucky       |
+| Bruce       |
+| Siddhu      |
+| Sahal       |
++-------------+
+8 rows in set (0.01 sec)
+
+mysql> SELECT DISTINCT(DEPARTMENT) FROM WORKER;
++------------+
+| DEPARTMENT |
++------------+
+| Admin      |
+| HR         |
+| Accountant |
++------------+
+3 rows in set (0.01 sec)
+
+mysql> -- 3) WRITE A QUERY TO SHOW THE LAST 5 RECORDS FROM THE WORKER TABLE.
+mysql>
+mysql> SELECT * FROM WORKER
+    -> ORDER BY WORKER_ID DESC
+    -> LIMIT 5;
++-----------+------------+-----------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name | Salary | Joining_Date        | Department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         8 | Sahal      | Samad     |  30000 | 2014-03-22 09:00:00 | Admin      |
+|         7 | Siddhu     | Sanwan    |  35000 | 2014-01-22 09:00:00 | Admin      |
+|         6 | Bruce      | Lee       |  30000 | 2014-04-22 09:00:00 | Accountant |
+|         5 | Lucky      | Langer    |  50000 | 2014-01-22 09:00:00 | Accountant |
+|         4 | Kim        | Joe       |  30000 | 2014-02-22 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+5 rows in set (0.01 sec)
+
+mysql> -- 4) WRITE A QUERY TO PRINT THE FIRST THREE CHARACTERS OF FIRST_NAME FROM WORKER TABLE.
+mysql> SELECT left(FIRST_NAME,3) AS FIRST_NAME_3_CHAR
+    -> FROM WORKER;
++-------------------+
+| FIRST_NAME_3_CHAR |
++-------------------+
+| Sur               |
+| Dwy               |
+| Joh               |
+| Kim               |
+| Luc               |
+| Bru               |
+| Sid               |
+| Sah               |
++-------------------+
+8 rows in set (0.01 sec)
+
+mysql> -- 5) WRITE AN SQL QUERY TO FIND THE POSITION OF THE ALPHABET 'a' IN THE FIRST_NAME COLUMN 'Suraj' FROM WORKER TABLE.
+
+mysql> SELECT LOCATE("s" , "Suraj",1);
++-------------------------+
+| LOCATE("s" , "Suraj",1) |
++-------------------------+
+|                       1 |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql> -- 6) WRITE AN SQL QUERY TO PRINT THE NAME OF THE EMPLOYEES HAVING THE HIGHEST SALARY IN EACH DEPARTMENT
+mysql>
+mysql> WITH SALARY_RANKING AS
+    -> (SELECT *, RANK()
+    -> OVER (PARTITION BY DEPARTMENT ORDER BY SALARY DESC) RANKING
+    -> FROM WORKER)
+    -> SELECT FIRST_NAME, LAST_NAME, DEPARTMENT, SALARY
+    -> FROM SALARY_RANKING
+    -> WHERE RANKING=1 ;
++------------+-------------+------------+--------+
+| FIRST_NAME | LAST_NAME   | DEPARTMENT | SALARY |
++------------+-------------+------------+--------+
+| Lucky      | Langer      | Accountant |  50000 |
+| Suraj      | Suryawanshi | Admin      | 100000 |
+| John       | Abrahim     | HR         |  40000 |
++------------+-------------+------------+--------+
+3 rows in set (0.02 sec)
+
+mysql> -- 7) WRITE A SQL QUERY TO PRINT THE FIRST NAME FROM THE WORKERS TABLE AFTER REMOVING WHITE SPACES FROM THE RIGHT SIDE.
+mysql> select rtrim(first_name) as trimmed_first_names from worker;
++---------------------+
+| trimmed_first_names |
++---------------------+
+| Suraj               |
+| Dwyane              |
+| John                |
+| Kim                 |
+| Lucky               |
+| Bruce               |
+| Siddhu              |
+| Sahal               |
++---------------------+
+8 rows in set (0.01 sec)
+
+mysql> -- 8) WRITE AN SQL QUERY THAT FETCHES THE UNIQUE VALUES OF DEPARTMENT FROM WORKER TABLE AND PRINTS ITS LENGTH.
+mysql> SELECT DISTINCT(DEPARTMENT) AS UNIQUE_DEPARTMENTS, LENGTH(DEPARTMENT) AS LENGTH_OF_DEPT_NAMES
+    -> FROM WORKER;
++--------------------+----------------------+
+| UNIQUE_DEPARTMENTS | LENGTH_OF_DEPT_NAMES |
++--------------------+----------------------+
+| Admin              |                    5 |
+| HR                 |                    2 |
+| Accountant         |                   10 |
++--------------------+----------------------+
+3 rows in set (0.01 sec)
+
+mysql> -- 9) WRITE AN SQL QUERY TO FETCH nth MAX SALARIES FROM A TABLE.
+mysql> WITH RANKED_SALARY AS
+    -> (SELECT *, DENSE_RANK()
+    -> OVER (ORDER BY SALARY DESC) RANKING_AS_PER_SALARY
+    -> FROM WORKER)
+    -> SELECT *
+    -> FROM RANKED_SALARY
+    -> WHERE RANKING_AS_PER_SALARY=50000;
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM WORKER;
++-----------+------------+-------------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department |
++-----------+------------+-------------+--------+---------------------+------------+
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |
+|         2 | Dwyane     | Johnson     |  20000 | 2014-02-22 09:00:00 | Admin      |
+|         3 | John       | Abrahim     |  40000 | 2014-06-22 09:00:00 | HR         |
+|         4 | Kim        | Joe         |  30000 | 2014-02-22 09:00:00 | Admin      |
+|         5 | Lucky      | Langer      |  50000 | 2014-01-22 09:00:00 | Accountant |
+|         6 | Bruce      | Lee         |  30000 | 2014-04-22 09:00:00 | Accountant |
+|         7 | Siddhu     | Sanwan      |  35000 | 2014-01-22 09:00:00 | Admin      |
+|         8 | Sahal      | Samad       |  30000 | 2014-03-22 09:00:00 | Admin      |
++-----------+------------+-------------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> WITH RANKED_SALARY AS
+    -> (SELECT *, DENSE_RANK()
+    -> OVER (ORDER BY SALARY DESC) RANKING_AS_PER_SALARY
+    -> FROM WORKER)
+    -> SELECT *
+    -> FROM RANKED_SALARY
+    -> WHERE RANKING_AS_PER_SALARY=1;
++-----------+------------+-------------+--------+---------------------+------------+-----------------------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department | RANKING_AS_PER_SALARY |
++-----------+------------+-------------+--------+---------------------+------------+-----------------------+
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |                     1 |
++-----------+------------+-------------+--------+---------------------+------------+-----------------------+
+1 row in set (0.00 sec)
+
+mysql> -- 10) WRITE AN SQL QUERY TO PRINT THE FIRST_NAME COLUMN FROM THE WORKER TABLE AFTER REPLACING 'a' WITH 'A'.
+mysql> SELECT REPLACE(FIRST_NAME,'a','A') AS REPLACED_NAME
+    -> FROM WORKER;
++---------------+
+| REPLACED_NAME |
++---------------+
+| SurAj         |
+| DwyAne        |
+| John          |
+| Kim           |
+| Lucky         |
+| Bruce         |
+| Siddhu        |
+| SAhAl         |
++---------------+
+8 rows in set (0.00 sec)
+
+mysql> -- 11) WRITE AN SQL QUERY TO PRINT ALL WORKER DETAILS FROM THE WORKER TABLE ORDER BY FIRST_NAME ASCENDING AND DEPARTMENT DESCENDING.
+mysql>
+mysql> SELECT *
+    -> FROM WORKER
+    -> ORDER BY FIRST_NAME ASC, DEPARTMENT DESC;
++-----------+------------+-------------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department |
++-----------+------------+-------------+--------+---------------------+------------+
+|         6 | Bruce      | Lee         |  30000 | 2014-04-22 09:00:00 | Accountant |
+|         2 | Dwyane     | Johnson     |  20000 | 2014-02-22 09:00:00 | Admin      |
+|         3 | John       | Abrahim     |  40000 | 2014-06-22 09:00:00 | HR         |
+|         4 | Kim        | Joe         |  30000 | 2014-02-22 09:00:00 | Admin      |
+|         5 | Lucky      | Langer      |  50000 | 2014-01-22 09:00:00 | Accountant |
+|         8 | Sahal      | Samad       |  30000 | 2014-03-22 09:00:00 | Admin      |
+|         7 | Siddhu     | Sanwan      |  35000 | 2014-01-22 09:00:00 | Admin      |
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |
++-----------+------------+-------------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> -- 12) WRITE AN SQL QUERY TO FETCH THE NAMES OF THE WORKERS WHO EARN THE HIGHEST SALARY.
+mysql>
+mysql> SELECT FIRST_NAME, LAST_NAME, SALARY
+    -> FROM WORKER
+    -> WHERE SALARY = (SELECT SALARY FROM WORKER ORDER BY SALARY DESC LIMIT 1);
++------------+-------------+--------+
+| FIRST_NAME | LAST_NAME   | SALARY |
++------------+-------------+--------+
+| Suraj      | Suryawanshi | 100000 |
++------------+-------------+--------+
+1 row in set (0.00 sec)
+
+mysql> -- 13) WRITE AN SQL QUERY TO PRINT DETAILS OF WORKERS EXCLUDING FIRST_NAME'S 'Vipul' AND 'Satish' FROM WORKER TABLE.
+mysql>
+mysql> SELECT *
+    -> FROM WORKER
+    -> WHERE FIRST_NAME NOT IN ('Suraj', 'Sahal');
++-----------+------------+-----------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name | Salary | Joining_Date        | Department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Dwyane     | Johnson   |  20000 | 2014-02-22 09:00:00 | Admin      |
+|         3 | John       | Abrahim   |  40000 | 2014-06-22 09:00:00 | HR         |
+|         4 | Kim        | Joe       |  30000 | 2014-02-22 09:00:00 | Admin      |
+|         5 | Lucky      | Langer    |  50000 | 2014-01-22 09:00:00 | Accountant |
+|         6 | Bruce      | Lee       |  30000 | 2014-04-22 09:00:00 | Accountant |
+|         7 | Siddhu     | Sanwan    |  35000 | 2014-01-22 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> -- 14) WRITE AN SQL QUERY TO PRINT DETAILS OF THE WORKERS WHOSE FIRST_NAME ENDS WITH 'h' AND CONTAINS SIX ALPHABETS.
+mysql> SELECT *
+    -> FROM WORKER
+    -> WHERE RIGHT(FIRST_NAME,1) = 'j' AND LENGTH(FIRST_NAME)=5;
++-----------+------------+-------------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department |
++-----------+------------+-------------+--------+---------------------+------------+
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |
++-----------+------------+-------------+--------+---------------------+------------+
+1 row in set (0.00 sec)
+
+
+mysql> -- 15) WRITE A QUERY TO VALIDATE EMAIL OF EMPLOYEE.
+mysql> -- VALIDATE MEANS CHECKING WHETHER THE EMAIL ENTERED IS OF THE REQUIRED FORMAT LIKE 'ABC@GMAIL.COM'.
+mysql> -- LET US ASSUME A FIELD 'EMP_EMAIL' WITH EMAIL ID'S OF THE EMPLOYEES
+mysql> -- 16) WRITE AN SQL QUERY TO PRINT DETAILS OF THE WORKERS WHO HAVE JOINED IN FEB 2014.
+mysql>
+mysql> SELECT *
+    -> FROM WORKER
+    -> WHERE JOINING_DATE LIKE '2014-02-%';
++-----------+------------+-----------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name | Salary | Joining_Date        | Department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Dwyane     | Johnson   |  20000 | 2014-02-22 09:00:00 | Admin      |
+|         4 | Kim        | Joe       |  30000 | 2014-02-22 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> -- 17) WRITE AN SQL QUERY TO FETCH DUPLICATE RECORDS HAVING MATCHING DATA IN SOME FIELDS OF A TABLE.
+mysql>
+mysql> -- LET US ASSUME THAT WE WANT TO CHECK FOR DUPLICATE RECORDS WHICH HAVE MATCHING DATA IN THE SALARY AND DEPARTMENT FIELDS TOGETHER.
+mysql> SELECT SALARY, DEPARTMENT ,COUNT(*)
+    -> FROM WORKER
+    -> GROUP BY  SALARY, DEPARTMENT
+    -> HAVING COUNT(*)>1;
++--------+------------+----------+
+| SALARY | DEPARTMENT | COUNT(*) |
++--------+------------+----------+
+|  30000 | Admin      |        2 |
++--------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> -- 18) HOW TO REMOVE DUPLICATE ROWS FROM TABLE?
+mysql>
+mysql> WITH DUPLICATE_RECORDS AS
+    -> (SELECT *, ROW_NUMBER()
+    -> OVER (PARTITION BY SALARY, DEPARTMENT) COUNT_NO
+    -> FROM WORKER )
+    -> DELETE FROM DUPLICATE_RECORDS
+    -> WHERE COUNT_NO>1;
+ERROR 1288 (HY000): The target table DUPLICATE_RECORDS of the DELETE is not updatable
+
+mysql> -- IN 'MySQL', CTE(COMMON TABLE EXPRESSIONS) IS CREATED AS A READ ONLY FILE, HENCE NO UPDATE OR DELETE IS POSSIBLE.
+mysql> -- BUT THE SAME IS POSSIBLE IN 'MS SQL SERVER'. TO COUNTER THIS IN MySQL pROVIDES YOU WITH THE DELETE JOIN STATEMENT
+mysql> -- THT ALLOWS YOU TO REMOVE DUPLICATE ROWS QUICKLY.
+mysql>
+mysql> SET SQL_SAFE_UPDATES = 0; -- TO REMOVE THE SAFE UDATE MODE OTHERWISE MySQL DOES NOT ALLOW ANY UPDATE/DELETE.
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+mysql> DELETE W1 FROM WORKER W1
+    -> INNER JOIN WORKER W2
+    -> WHERE W1.WORKER_ID < W2.WORKER_ID
+    -> AND W1.SALARY= W2.SALARY
+    -> AND W1.DEPARTMENT=W2.DEPARTMENT;
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> SELECT *, COUNT(*)
+    -> FROM WORKER
+    -> GROUP BY SALARY, DEPARTMENT
+    -> HAVING COUNT(*)>1; -- SHOWS THAT THERE ARE NO DUPLICATE RECORDS IN SALARY AND DEPARTMENT.
+Empty set (0.00 sec)
+
+mysql>
+mysql> -- 19) WRITE AN SQL QUERY TO SHOW ONLY ODD ROWS FROM A TABLE.
+mysql>
+mysql> WITH INDEXED_TABLE AS
+    -> (SELECT * , ROW_NUMBER()
+    -> OVER (ORDER BY WORKER_ID) ROW_NO
+    -> FROM WORKER)
+    -> SELECT * FROM INDEXED_TABLE
+    -> WHERE MOD(ROW_NO,2);
++-----------+------------+-------------+--------+---------------------+------------+--------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department | ROW_NO |
++-----------+------------+-------------+--------+---------------------+------------+--------+
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |      1 |
+|         3 | John       | Abrahim     |  40000 | 2014-06-22 09:00:00 | HR         |      3 |
+|         6 | Bruce      | Lee         |  30000 | 2014-04-22 09:00:00 | Accountant |      5 |
+|         8 | Sahal      | Samad       |  30000 | 2014-03-22 09:00:00 | Admin      |      7 |
++-----------+------------+-------------+--------+---------------------+------------+--------+
+4 rows in set (0.01 sec)
+
+mysql> -- 20) WRITE AN SQL QUERY TO CLONE A NEW TABLE FROM ANOTHER TABLE.
+mysql>
+mysql> -- i) SIMPLE CLONING - COPIES THE ENTIRE TABLE STRUCTURE WITH THE DATA
+mysql>
+mysql> CREATE TABLE WORKER_NEW SELECT * FROM WORKER;
+Query OK, 7 rows affected (0.04 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> -- ii) SHALLOW CLONING -- SHOWS ONLY THE TABLE STRUCTURE. NO DATA IS COPIED.
+mysql>
+mysql> CREATE TABLE WORKER_NEW LIKE WORKER;
+ERROR 1050 (42S01): Table 'worker_new' already exists
+mysql> -- iii) DEEP CLONING
+mysql>
+mysql> CREATE TABLE WORKER_NEW LIKE WORKER;
+ERROR 1050 (42S01): Table 'worker_new' already exists
+mysql> INSERT INTO WORKER_NEW SELECT * FROM WORKER;
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 21) WRITE AN SQL QUERY TO FETCH INTERSECTING RECORDS OF TWO TABLES
+mysql>
+mysql> -- LET'S CREATE TWO TABLES
+mysql> CREATE TABLE LIST1
+    -> (
+    -> ID INT,
+    -> NAME VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> INSERT INTO LIST1
+    -> VALUES
+    ->  (1,"Meera"),
+    ->  (2,"Gowri");
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> CREATE TABLE LIST2 LIKE LIST1;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> INSERT INTO LIST2
+    -> VALUES
+    -> (2,"Gowri"),
+    -> (3,"Ved");
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> SELECT * FROM LIST1
+    -> INTERSECT
+    -> SELECT * FROM LIST2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT * FROM LIST2' at line 3
+mysql> -- 23) WRITE AN SQL QUERY TO SHOW THE TOP N (SAY 10) RECORDS OF THE TABLE.
+mysql>
+mysql> SELECT *
+    -> FROM WORKER
+    -> ORDER BY SALARY DESC
+    -> LIMIT 10;
++-----------+------------+-------------+--------+---------------------+------------+
+| Worker_ID | First_Name | Last_Name   | Salary | Joining_Date        | Department |
++-----------+------------+-------------+--------+---------------------+------------+
+|         1 | Suraj      | Suryawanshi | 100000 | 2014-06-22 09:00:00 | Admin      |
+|         5 | Lucky      | Langer      |  50000 | 2014-01-22 09:00:00 | Accountant |
+|         3 | John       | Abrahim     |  40000 | 2014-06-22 09:00:00 | HR         |
+|         7 | Siddhu     | Sanwan      |  35000 | 2014-01-22 09:00:00 | Admin      |
+|         6 | Bruce      | Lee         |  30000 | 2014-04-22 09:00:00 | Accountant |
+|         8 | Sahal      | Samad       |  30000 | 2014-03-22 09:00:00 | Admin      |
+|         2 | Dwyane     | Johnson     |  20000 | 2014-02-22 09:00:00 | Admin      |
++-----------+------------+-------------+--------+---------------------+------------+
+7 rows in set (0.01 sec)
+
+mysql> -- 24) WRITE AN SQL QUERY TO DETERMINE THE NTH(SAY N=5) HIGHEST SALARY FROM A TABLE.
+mysql>
+mysql> SELECT SALARY
+    -> FROM WORKER
+    -> ORDER BY SALARY DESC
+    -> LIMIT 4,1;  -- 4=N-1
++--------+
+| SALARY |
++--------+
+|  30000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> -- 25) WRITE AN SQL QUERY TO DETERMINE THE 5TH(SAY N=5) WITHOUT USING TOP OR LIMIT METHOD.
+mysql>
+mysql> WITH SALARY_RANKING AS
+    -> (SELECT SALARY, DENSE_RANK()
+    -> OVER (ORDER BY SALARY DESC) RANKING
+    -> FROM WORKER )
+    -> SELECT SALARY
+    -> FROM SALARY_RANKING
+    -> WHERE RANKING=5;
++--------+
+| SALARY |
++--------+
+|  30000 |
+|  30000 |
++--------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql> -- 26) WRITE AN SQL QUERY TO FETCH THE LIST OF EMPLOYEES WITH THE SAME SALARY
+mysql>
+mysql> INSERT INTO WORKER
+    -> VALUES (004, 'Amitabh', 'Singh', 500000, '14-02-20 09.00.00', 'Admin'); -- ADDING A RECORD WITH SAME SALARY.
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> SELECT W1.FIRST_NAME, W1.LAST_NAME
+    -> FROM WORKER W1 JOIN WORKER W2
+    -> WHERE W1.SALARY= W2.SALARY
+    -> AND W1.WORKER_ID != W2.WORKER_ID;
++------------+-----------+
+| FIRST_NAME | LAST_NAME |
++------------+-----------+
+| Sahal      | Samad     |
+| Bruce      | Lee       |
++------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO LIST1
+    -> VALUES
+    ->  (1,"Meera"),
+    ->  (2,"Gowri");
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO LIST1
+    -> VALUES
+    ->  (1,"Meera"),
+    ->  (2,"Gowri");
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO LIST2
+    -> VALUES
+    -> (2,"Gowri"),
+    -> (3,"Ved");
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
