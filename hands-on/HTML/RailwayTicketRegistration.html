@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Registration</title>
+<body  bgcolor="#0AAFFBC">
+<div  align="center" class="container">
+<h1>Registration form</h1>
+
+<form id="registration_form" method="POST">
+<table>
+           <tr>
+                <td><label>First name : </label></td>
+                <td><input name="firstName" /></td>
+           </tr>
+ 
+            <tr>
+                <td><label>Last name : </label></td>
+                <td><input name="lastName" /></td>
+            </tr>  
+            
+           
+ 			 <tr>
+ 				 <td><label>Email address : </label></td>
+ 				 <td><input type="text" name="email_addr"/></td>
+  			</tr>
+  <tr><td><label>Select your Boarding Station :	 </label></td>
+   <td><select name="package">
+	<option value="CSMT" >CSMT</options>
+	<option value="Thane" >Thane</options>
+	<option value="LTT" >LTT</options>
+	<option value="Dadar" >Dadar</options>
+   </select></td>
+   </tr>
+   <tr><td><label>Select your Destination Station :  </label></td>
+   <td><select name="package">
+   <option value="Kolhapur" >Kolhapur</options>
+	<option value="Luckhnow" >Luckhnow</options>
+	<option value="Ayodhya" >Ayodhya</options>
+	<option value="Delhi" >Delhi</options>
+	<option value="Jaipur" >Jaipur</options>
+	<option value="Panvel" >Panvel</options>
+	<option value="Sangli" >Sangli</options>
+	
+   </select>
+  </td>
+   </tr>
+   <tr>
+   <td><label>Departure date : </label></td>
+   <td><input type="text" name="arv_dt" placeholder="mm/dd/yyyy" ></td>
+   </tr>
+   <tr>
+   <td><label>Arrival date : </label></td>
+   <td><input type="text" name="arv_dt" placeholder="mm/dd/yyyy" ></td>
+   </tr>
+   <tr>
+   <td><label>Number of persons : </label></td>
+   <td><input type="text" name="persons"></td>
+   </tr>
+     
+     <tr> <td><label>Payment Option : </label> </td>
+    <td> <input type="radio" name="payment" value="cc" />Credit Card 
+     <input type="radio" name="payment" value="dc" />Debit card 
+     <input type="radio" name="payment" value="wallet">wallet</td>
+     </tr>
+     
+   <tr>  
+   <td><label>Terms and conditions : </label></td>
+  <td><input type="radio" name="tnc" value="agree" checked>I agree
+  <input type="radio" name="tnc" value="disagree" >I disagree
+  </td>
+  </tr>
+  
+  <tr><td><button type="submit"  name="submit">Submit</button></td></tr>
+</table>
+</form>
+
+</div>
+</body>
+</html>
